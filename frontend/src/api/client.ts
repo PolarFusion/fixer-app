@@ -100,7 +100,7 @@ api.interceptors.response.use(
       toast.error('Сессия истекла. Войдите в систему заново.')
     } else if (error.response?.status === 403) {
       toast.error('У вас нет прав для выполнения этого действия')
-    } else if (error.response?.status >= 500) {
+    } else if (error.response?.status && error.response.status >= 500) {
       toast.error('Ошибка сервера. Попробуйте позже.')
     } else if (!error.response) {
       toast.error('Ошибка сети. Проверьте подключение к интернету.')

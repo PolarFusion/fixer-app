@@ -1,5 +1,5 @@
 nohup: ignoring input
-INFO:     Started server process [11739]
+INFO:     Started server process [15868]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
@@ -11,8 +11,6 @@ INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
    📅 Еженедельный анализ дискового пространства: 2025-07-13 03:00:00+00:00
 ✅ Приложение готово к работе!
 📝 GET /api/health - 200 - 0.001s
-INFO:     127.0.0.1:42206 - "GET /api/health HTTP/1.1" 200 OK
-📝 GET /api/docs - 200 - 0.000s
-INFO:     127.0.0.1:42708 - "GET /api/docs HTTP/1.1" 200 OK
-📝 GET /api/health - 200 - 0.001s
-INFO:     127.0.0.1:59434 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57738 - "GET /api/health HTTP/1.1" 200 OK
+📝 GET /api/health - 200 - 0.000s
+INFO:     127.0.0.1:57746 - "GET /api/health HTTP/1.1" 200 OK

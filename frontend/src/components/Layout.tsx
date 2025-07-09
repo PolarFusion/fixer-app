@@ -8,8 +8,7 @@ import {
   Settings, 
   LogOut, 
   Menu,
-  X,
-  Bell
+  X
 } from 'lucide-react'
 import { useAuthStore, useCurrentUser, useIsAdmin } from '../hooks/useAuth'
 

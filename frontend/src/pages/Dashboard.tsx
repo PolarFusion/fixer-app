@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query'
-import { FileText, Clock, CheckCircle, AlertTriangle, Users } from 'lucide-react'
+import { FileText, Clock, CheckCircle, Users } from 'lucide-react'
 import { ticketsAPI } from '../api/client'
 import { useCurrentUser } from '../hooks/useAuth'
 import LoadingSpinner from '../components/LoadingSpinner'
@@ -191,7 +191,7 @@ const Dashboard = () => {
 
 // Компонент карточки статистики
 const StatCard = ({ title, value, icon: Icon, color }: any) => {
-  const colorClasses = {
+  const colorClasses: Record<string, string> = {
     blue: 'bg-blue-500',
     green: 'bg-green-500',
     yellow: 'bg-yellow-500',
@@ -203,7 +203,7 @@ const StatCard = ({ title, value, icon: Icon, color }: any) => {
       <div className="card-content">
         <div className="flex items-center">
           <div className="flex-shrink-0">
-            <div className={`p-3 rounded-md ${colorClasses[color]}`}>
+            <div className={`p-3 rounded-md ${colorClasses[color] || 'bg-gray-500'}`}>
               <Icon className="h-6 w-6 text-white" />
             </div>
           </div>
