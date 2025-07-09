@@ -14,3 +14,5 @@ INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
 INFO:     127.0.0.1:42206 - "GET /api/health HTTP/1.1" 200 OK
 📝 GET /api/docs - 200 - 0.000s
 INFO:     127.0.0.1:42708 - "GET /api/docs HTTP/1.1" 200 OK
+📝 GET /api/health - 200 - 0.001s
+INFO:     127.0.0.1:59434 - "GET /api/health HTTP/1.1" 200 OK
