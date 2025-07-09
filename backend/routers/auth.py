@@ -223,10 +223,10 @@ async def toggle_user_status(
 
 @router.post("/change-password")
 async def change_password(
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    session: AsyncSession = Depends(get_session),
     old_password: str = Form(...),
-    new_password: str = Form(...),
-    current_user: Annotated[User, Depends(get_current_active_user)] = Depends(),
-    session: AsyncSession = Depends(get_session)
+    new_password: str = Form(...)
 ):
     """Смена пароля пользователя"""
     # Проверяем старый пароль

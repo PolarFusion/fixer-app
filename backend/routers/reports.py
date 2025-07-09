@@ -22,7 +22,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment
-from openpyxl.utils.dataframe import dataframe_to_rows
+# from openpyxl.utils.dataframe import dataframe_to_rows  # Не используется
 
 from database import get_session, get_ticket_by_id, get_tickets_for_user
 from models import Ticket, TicketStatus, User, UserRole, DigestRange
@@ -387,9 +387,9 @@ def create_digest_xlsx(tickets: List[Ticket], period: str) -> io.BytesIO:
 @router.get("/{ticket_id}")
 async def get_ticket_report(
     ticket_id: int,
-    format: str = "pdf",  # pdf или xlsx
-    current_user: Annotated[User, Depends(get_current_active_user)] = Depends(),
-    session: AsyncSession = Depends(get_session)
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    session: AsyncSession = Depends(get_session),
+    format: str = "pdf"  # pdf или xlsx
 ):
     """Генерация отчета по конкретной заявке"""
     # Получаем заявку
@@ -425,9 +425,9 @@ async def get_ticket_report(
 @router.get("/digest/{range}")
 async def get_digest_report(
     range: DigestRange,
-    format: str = "pdf",
-    current_user: Annotated[User, Depends(check_admin_role)] = Depends(),
-    session: AsyncSession = Depends(get_session)
+    current_user: Annotated[User, Depends(check_admin_role)],
+    session: AsyncSession = Depends(get_session),
+    format: str = "pdf"
 ):
     """Генерация сводного отчета (только для админов)"""
     # Определяем период

@@ -170,14 +170,14 @@ async def websocket_endpoint(websocket: WebSocket, user_id: int):
 
 @router.post("/", response_model=TicketPublic)
 async def create_ticket(
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    session: AsyncSession = Depends(get_session),
     title: str = Form(...),
     address: str = Form(...),
     description: str = Form(...),
     deadline: str = Form(...),  # ISO datetime string
     priority: int = Form(1),
-    executor_id: Optional[int] = Form(None),
-    current_user: Annotated[User, Depends(get_current_active_user)] = Depends(),
-    session: AsyncSession = Depends(get_session)
+    executor_id: Optional[int] = Form(None)
 ):
     """
     Создание новой заявки.
@@ -236,12 +236,12 @@ async def create_ticket(
 
 @router.get("/", response_model=List[TicketPublic])
 async def get_tickets(
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    session: AsyncSession = Depends(get_session),
     status: Optional[TicketStatus] = None,
     executor_id: Optional[int] = None,
     limit: int = 50,
-    offset: int = 0,
-    current_user: Annotated[User, Depends(get_current_active_user)] = Depends(),
-    session: AsyncSession = Depends(get_session)
+    offset: int = 0
 ):
     """
     Получение списка заявок с фильтрацией.
@@ -266,7 +266,7 @@ async def get_tickets(
 @router.get("/{ticket_id}", response_model=TicketPublic)
 async def get_ticket(
     ticket_id: int,
-    current_user: Annotated[User, Depends(get_current_active_user)] = Depends(),
+    current_user: Annotated[User, Depends(get_current_active_user)],
     session: AsyncSession = Depends(get_session)
 ):
     """Получение информации о конкретной заявке"""
@@ -286,14 +286,14 @@ async def get_ticket(
 @router.put("/{ticket_id}", response_model=TicketPublic)
 async def update_ticket(
     ticket_id: int,
+    current_user: Annotated[User, Depends(get_current_active_user)],
+    session: AsyncSession = Depends(get_session),
     status: Optional[TicketStatus] = Form(None),
     executor_id: Optional[int] = Form(None),
     completion_comment: Optional[str] = Form(None),
     rejection_reason: Optional[str] = Form(None),
     before_photo: Optional[UploadFile] = File(None),
-    after_photo: Optional[UploadFile] = File(None),
-    current_user: Annotated[User, Depends(get_current_active_user)] = Depends(),
-    session: AsyncSession = Depends(get_session)
+    after_photo: Optional[UploadFile] = File(None)
 ):
     """
     Обновление заявки.
@@ -388,7 +388,7 @@ async def update_ticket(
 @router.delete("/{ticket_id}")
 async def delete_ticket(
     ticket_id: int,
-    current_user: Annotated[User, Depends(check_admin_role)] = Depends(),
+    current_user: Annotated[User, Depends(check_admin_role)],
     session: AsyncSession = Depends(get_session)
 ):
     """Удаление заявки (только для админов)"""
@@ -414,7 +414,7 @@ async def delete_ticket(
 
 @router.get("/executors/list", response_model=List[dict])
 async def get_executors_list(
-    current_user: Annotated[User, Depends(get_current_active_user)] = Depends(),
+    current_user: Annotated[User, Depends(get_current_active_user)],
     session: AsyncSession = Depends(get_session)
 ):
     """Получение списка исполнителей для назначения"""
@@ -437,7 +437,7 @@ async def get_media_file(filename: str):
 
 @router.get("/dashboard/data", response_model=DashboardData)
 async def get_dashboard_data(
-    current_user: Annotated[User, Depends(get_current_active_user)] = Depends(),
+    current_user: Annotated[User, Depends(get_current_active_user)],
     session: AsyncSession = Depends(get_session)
 ):
     """Получение данных для дашборда"""
