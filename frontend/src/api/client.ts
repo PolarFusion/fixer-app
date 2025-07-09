@@ -64,9 +64,19 @@ export interface DashboardData {
   my_tickets?: Ticket[]
 }
 
+// Базовый URL для API - используем внешний IP для демо
+const getBaseURL = () => {
+  // В продакшене используем относительные пути
+  if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    return 'http://localhost:8000'
+  }
+  // Для удаленного доступа используем внешний IP
+  return 'http://52.32.147.109:8000'
+}
+
 // Создаем экземпляр axios
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: getBaseURL(),
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
@@ -118,7 +128,7 @@ export const authAPI = {
     formData.append('username', credentials.username)
     formData.append('password', credentials.password)
     
-    const response = await api.post('/auth/login', formData, {
+    const response = await api.post('/api/auth/login', formData, {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
@@ -127,7 +137,7 @@ export const authAPI = {
   },
 
   getCurrentUser: async (): Promise<User> => {
-    const response = await api.get('/auth/me')
+    const response = await api.get('/api/auth/me')
     return response.data
   },
 
@@ -145,22 +155,22 @@ export const ticketsAPI = {
     limit?: number
     offset?: number
   }): Promise<Ticket[]> => {
-    const response = await api.get('/tickets/', { params })
+    const response = await api.get('/api/tickets/', { params })
     return response.data
   },
 
   getById: async (id: number): Promise<Ticket> => {
-    const response = await api.get(`/tickets/${id}`)
+    const response = await api.get(`/api/tickets/${id}`)
     return response.data
   },
 
   create: async (data: TicketCreate): Promise<Ticket> => {
-    const response = await api.post('/tickets/', data)
+    const response = await api.post('/api/tickets/', data)
     return response.data
   },
 
   update: async (id: number, data: FormData): Promise<Ticket> => {
-    const response = await api.put(`/tickets/${id}`, data, {
+    const response = await api.put(`/api/tickets/${id}`, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -169,16 +179,16 @@ export const ticketsAPI = {
   },
 
   delete: async (id: number): Promise<void> => {
-    await api.delete(`/tickets/${id}`)
+    await api.delete(`/api/tickets/${id}`)
   },
 
   getExecutors: async (): Promise<Array<{id: number, full_name: string, email: string}>> => {
-    const response = await api.get('/tickets/executors/list')
+    const response = await api.get('/api/tickets/executors/list')
     return response.data
   },
 
   getDashboardData: async (): Promise<DashboardData> => {
-    const response = await api.get('/tickets/dashboard/data')
+    const response = await api.get('/api/tickets/dashboard/data')
     return response.data
   },
 }
@@ -186,7 +196,7 @@ export const ticketsAPI = {
 // Отчеты
 export const reportsAPI = {
   downloadTicketReport: async (ticketId: number, format: 'pdf' | 'xlsx'): Promise<Blob> => {
-    const response = await api.get(`/reports/${ticketId}`, {
+    const response = await api.get(`/api/reports/${ticketId}`, {
       params: { format },
       responseType: 'blob',
     })
@@ -194,7 +204,7 @@ export const reportsAPI = {
   },
 
   downloadDigestReport: async (range: 'daily' | 'weekly', format: 'pdf' | 'xlsx'): Promise<Blob> => {
-    const response = await api.get(`/reports/digest/${range}`, {
+    const response = await api.get(`/api/reports/digest/${range}`, {
       params: { format },
       responseType: 'blob',
     })
