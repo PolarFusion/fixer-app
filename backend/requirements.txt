@@ -1,0 +1,14 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+sqlmodel==0.0.14
+sqlite3
+python-multipart==0.0.6
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+reportlab==4.0.7
+openpyxl==3.1.2
+apscheduler==3.10.4
+websockets==12.0
+python-dotenv==1.0.0
+pillow==10.1.0
+aiofiles==23.2.1

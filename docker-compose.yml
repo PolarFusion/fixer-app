@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # Backend FastAPI
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: repair-backend
+    environment:
+      - DATABASE_URL=sqlite:///./tickets.db
+      - SECRET_KEY=your-production-secret-key-change-this
+      - ENVIRONMENT=production
+    volumes:
+      - ./backend/tickets.db:/app/tickets.db
+      - ./backend/media:/app/media
+    expose:
+      - "8000"
+    networks:
+      - repair-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend React
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://backend:8000
+    container_name: repair-frontend
+    expose:
+      - "3000"
+    networks:
+      - repair-network
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: repair-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./backend/media:/var/www/media:ro
+    networks:
+      - repair-network
+    restart: unless-stopped
+    depends_on:
+      - backend
+      - frontend
+
+networks:
+  repair-network:
+    driver: bridge
+
+volumes:
+  media_data:
+    driver: local
